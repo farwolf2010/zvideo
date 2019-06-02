@@ -785,7 +785,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     }
     if (!self.player) {
         self.isAutoPlay = YES;
-        [self configSPPlayer];
+//        [self configSPPlayer];
     }
     
 }
@@ -795,7 +795,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)applicationWillTerminate {
     // 保存当前播放的时间点
-    [self saveLastVideoPlayInfo];
+//    [self saveLastVideoPlayInfo];
 }
 
 #pragma mark - 旋转相关
