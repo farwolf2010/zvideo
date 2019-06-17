@@ -89,6 +89,7 @@ typedef NS_ENUM(NSInteger,SPVideoPlayerLoadStatus) {
 @property (nonatomic, assign) SPPlayerLayerGravity    playerLayerGravity;
 /** 是否有下载功能(默认是关闭) */
 @property (nonatomic, assign) BOOL                    hasDownload;
+
 /** 是否要求预览图，全屏时默认为YES */
 @property (nonatomic, assign) BOOL                    requirePreviewView;
 /** 设置代理 */

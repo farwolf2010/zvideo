@@ -31,6 +31,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
        _title = attributes[@"title"];
         _img = attributes[@"img"];
        _autoPlay = [attributes[@"autoPlay"] boolValue];
+         _liveMode = [attributes[@"liveMode"] boolValue];
        if(attributes[@"pos"])
         _position = [attributes[@"pos"] longLongValue]/1000;
        else{
@@ -126,6 +127,9 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
           [video startPlay];
     }
     SPVideoPlayerControlView *control=video.controlView;
+    control.liveMode=self.liveMode;
+    if(control.liveMode)
+    [control hideControlView];
     [self regist:@"onPlayTimer" method:@selector(onPlayTimer:)];
     [self fireEvent:@"didload" params:nil];
 //    control.playDelegate=self;

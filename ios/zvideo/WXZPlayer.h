@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(strong,nonatomic)  SPVideoPlayerView *video;
 @property(strong,nonatomic)  UIImageView *placeholder;
 @property(nonatomic) BOOL autoPlay;
+@property(nonatomic) BOOL liveMode;
 
 @end
 

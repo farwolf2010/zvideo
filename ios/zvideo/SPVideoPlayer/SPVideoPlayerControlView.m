@@ -734,6 +734,9 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 // 显示控制层,SPPlayerAnimationTimeInterval秒后自动隐藏
 - (void)sp_playerShowControlView {
+    if(self.liveMode){
+        return;
+    }
     if ([self.delegate respondsToSelector:@selector(sp_controlViewWillShow:isFullscreen:)]) {
         [self.delegate sp_controlViewWillShow:self isFullscreen:self.isFullScreenMode];
     }

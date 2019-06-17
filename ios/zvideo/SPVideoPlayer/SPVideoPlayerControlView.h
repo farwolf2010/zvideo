@@ -12,12 +12,13 @@
 #import "WXSDKInstance.h"
 
 @interface SPVideoPlayerControlView : UIView
-
+@property (nonatomic, assign) BOOL                    liveMode;
 - (void)sp_playerShowControlView;
 - (void)sp_playerResetControlView;
 - (void)repeatButtonnAction:(UIButton *)sender;
 @property (nonatomic, weak) id<PlayDelegate> playDelegate;
 -(void)setImg:(NSString*)url weexIntance:(WXSDKInstance*)instance;
+- (void)hideControlView ;
 @end
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,6 +72,7 @@
 @property (nonatomic, strong) UILabel *promptLabel;
 // 刷新重试按钮
 @property (nonatomic, strong) UIButton *refreshbutton;
+
 // 全屏按钮和返回按钮在controlView上已经有了，但是当隐藏topView和bottomView时，要单独去显示返回按钮和全屏按钮不方便，所以在该view上另加
 // 全屏按钮
 @property (nonatomic, strong) UIButton *fullScreenButton;
