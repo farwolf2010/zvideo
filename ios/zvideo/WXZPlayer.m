@@ -69,32 +69,43 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 
 
 - (void)updateAttributes:(NSDictionary *)attributes{
+    if(attributes[@"src"])
     _src = attributes[@"src"];
+    if(attributes[@"title"])
     _title = attributes[@"title"];
+    if(attributes[@"img"])
       _img = attributes[@"img"];
+    if(attributes[@"autoPlay"])
     _autoPlay = [attributes[@"autoPlay"] boolValue];
     if(attributes[@"pos"])
         _position = [attributes[@"pos"] longLongValue]/1000;
     else{
         _position=0;
     }
-    if(_src!=nil||_title!=nil){
-        [_video removeFromSuperview];
-        SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
-        _video=video;
-        
-        _video.requirePreviewView = NO;
-        SPVideoPlayerControlView *c=_video.controlView;
-    
-//        setImageSource
-        video.backgroundColor=[UIColor blackColor];
-        self.videoItem.seekTime=_position;
-        self.videoItem.videoURL= [self getUrl:self.src];
-        [video configureControlView:nil videoItem:self.videoItem];
-        if(_autoPlay){
-            [video startPlay];
-        }
+    if(_img){
+       
+        NSURL  *ul=[Weex getFinalUrl:_img weexInstance:self.weexInstance];
+        [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
+            _placeholder.image=img;
+        }];
     }
+//    if(_src!=nil||_title!=nil){
+//        [_video removeFromSuperview];
+//        SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
+//        _video=video;
+//
+//        _video.requirePreviewView = NO;
+//        SPVideoPlayerControlView *c=_video.controlView;
+//
+////        setImageSource
+//        video.backgroundColor=[UIColor blackColor];
+//        self.videoItem.seekTime=_position;
+//        self.videoItem.videoURL= [self getUrl:self.src];
+//        [video configureControlView:nil videoItem:self.videoItem];
+//        if(_autoPlay){
+//            [video startPlay];
+//        }
+//    }
     
 }
 

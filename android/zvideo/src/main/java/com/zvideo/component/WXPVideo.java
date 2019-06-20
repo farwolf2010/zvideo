@@ -34,7 +34,7 @@ public class WXPVideo extends  WXVContainer<VideoView>{
     Timer timer;
     boolean compelete;
     String title;
-
+    boolean autoPlay;
     public WXPVideo(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
     }
@@ -120,9 +120,13 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
     @WXComponentProp(name = "autoPlay")
     public void setAutoPlay(boolean auto){
+
         if(auto){
             if(getHostView().getUrl()!=null){
                 this.play();
+            }
+            else{
+                autoPlay=auto;
             }
         }
     }
@@ -143,6 +147,9 @@ public class WXPVideo extends  WXVContainer<VideoView>{
         src= Weex.getRelativeUrl(src,mInstance);
         src=src.replace(Const.PREFIX_SDCARD,"file://");
         getHostView().setUp(src,this.title+"");
+        if(autoPlay){
+            this.play();
+        }
     }
 
     @JSMethod

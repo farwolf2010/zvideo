@@ -956,8 +956,9 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 -(void)setImg:(NSString*)url weexIntance:(WXSDKInstance*)instance{
        NSURL  *ul=[Weex getFinalUrl:url weexInstance:instance];
+    _placeholderView.placeholderImageView.image=nil;
         [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
-            _placeholderView.placeholderImageView=img;
+            _placeholderView.placeholderImageView.image=img;
         }];
 }
 
