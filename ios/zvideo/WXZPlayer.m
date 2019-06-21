@@ -87,10 +87,8 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     else{
         _position=0;
     }
-    if(_img){
-        
-        
-    }
+    
+    
     if(_src!=nil){
         [_video removeFromSuperview];
         SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
@@ -110,8 +108,15 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         if(_img){
             [self resetimg];
         }
+        if(self.liveMode)
+            [self resetCover];
+        return;
     }
-    
+    if(_img){
+        [self resetimg];
+    }
+    if(self.liveMode)
+        [self resetCover];
 }
 
 -(NSURL*)getUrl:(NSString*)src{
@@ -142,10 +147,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     if(_autoPlay){
         [video startPlay];
     }
-    SPVideoPlayerControlView *control=video.controlView;
-    control.liveMode=self.liveMode;
-    if(control.liveMode)
-        [control hideControlView];
+    [self resetCover];
     [self regist:@"onPlayTimer" method:@selector(onPlayTimer:)];
     [self fireEvent:@"didload" params:nil];
     //    control.playDelegate=self;
@@ -158,6 +160,14 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
     _placeholder.hidden=false;
 }
+
+-(void)resetCover{
+    SPVideoPlayerControlView *control=_video.controlView;
+    control.liveMode=self.liveMode;
+    if(control.liveMode)
+        [control hideControlView];
+}
+
 -(void)resetimg{
     UIImageView *placeholder=[UIImageView new];
     _placeholder=placeholder;
