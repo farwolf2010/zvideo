@@ -23,46 +23,51 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 
 - (instancetype)initWithRef:(NSString *)ref type:(NSString *)type styles:(NSDictionary *)styles attributes:(NSDictionary *)attributes events:(NSArray *)events weexInstance:(WXSDKInstance *)weexInstance
 {
-  
-   if( self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance])
-   {
-       self.weexInstance=weexInstance;
-       _src = attributes[@"src"];
-       _title = attributes[@"title"];
-        _img = attributes[@"img"];
-       _autoPlay = [attributes[@"autoPlay"] boolValue];
-         _liveMode = [attributes[@"liveMode"] boolValue];
-       if(attributes[@"pos"])
-        _position = [attributes[@"pos"] longLongValue]/1000;
-       else{
-           _position=0;
-       }
-   }
+    
+    if( self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance])
+    {
+        self.weexInstance=weexInstance;
+        if(attributes[@"src"])
+            _src = attributes[@"src"];
+        if(attributes[@"title"])
+            _title = attributes[@"title"];
+        if(attributes[@"img"])
+            _img = attributes[@"img"];
+        if(attributes[@"autoPlay"])
+            _autoPlay = [attributes[@"autoPlay"] boolValue];
+        if(attributes[@"liveMode"])
+            _liveMode = [attributes[@"liveMode"] boolValue];
+        if(attributes[@"pos"])
+            _position = [attributes[@"pos"] longLongValue]/1000;
+        else{
+            _position=0;
+        }
+    }
     return self;
 }
 -(UIView*)loadView{
     UIView *v=[UIView new];
     v.backgroundColor=[UIColor blackColor];
-  
-//    [v addSubview:video];
-//    [video mas_makeConstraints:^(MASConstraintMaker *make) {
-//         make.left.mas_equalTo(v);
-//         make.right.mas_equalTo(v);
-//         make.bottom.mas_equalTo(v);
-//         make.top.mas_equalTo(v);
-//    }];
+    
+    //    [v addSubview:video];
+    //    [video mas_makeConstraints:^(MASConstraintMaker *make) {
+    //         make.left.mas_equalTo(v);
+    //         make.right.mas_equalTo(v);
+    //         make.bottom.mas_equalTo(v);
+    //         make.top.mas_equalTo(v);
+    //    }];
     return v;
 }
 - (SPVideoItem *)videoItem {
     SPVideoItem *_videoItem=[SPVideoItem new];
-   
-        _videoItem                  = [[SPVideoItem alloc] init];
-          _videoItem.title            = self.title;
-        _videoItem.videoURL         = [self getUrl:self.src];
-        _videoItem.placeholderImage = [UIImage imageNamed:@"qyplayer_aura2_background_normal_iphone_375x211_"];
-        // playerView的父视图
-        _videoItem.seekTime=_position;    
-        _videoItem.fatherView       = self.view;
+    
+    _videoItem                  = [[SPVideoItem alloc] init];
+    _videoItem.title            = self.title;
+    _videoItem.videoURL         = [self getUrl:self.src];
+    _videoItem.placeholderImage = [UIImage imageNamed:@"qyplayer_aura2_background_normal_iphone_375x211_"];
+    // playerView的父视图
+    _videoItem.seekTime=_position;
+    _videoItem.fatherView       = self.view;
     
     return _videoItem;
 }
@@ -70,42 +75,42 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 
 - (void)updateAttributes:(NSDictionary *)attributes{
     if(attributes[@"src"])
-    _src = attributes[@"src"];
+        _src = attributes[@"src"];
     if(attributes[@"title"])
-    _title = attributes[@"title"];
+        _title = attributes[@"title"];
     if(attributes[@"img"])
-      _img = attributes[@"img"];
+        _img = attributes[@"img"];
     if(attributes[@"autoPlay"])
-    _autoPlay = [attributes[@"autoPlay"] boolValue];
+        _autoPlay = [attributes[@"autoPlay"] boolValue];
     if(attributes[@"pos"])
         _position = [attributes[@"pos"] longLongValue]/1000;
     else{
         _position=0;
     }
     if(_img){
-       
+        
         NSURL  *ul=[Weex getFinalUrl:_img weexInstance:self.weexInstance];
         [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
             _placeholder.image=img;
         }];
     }
-//    if(_src!=nil||_title!=nil){
-//        [_video removeFromSuperview];
-//        SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
-//        _video=video;
-//
-//        _video.requirePreviewView = NO;
-//        SPVideoPlayerControlView *c=_video.controlView;
-//
-////        setImageSource
-//        video.backgroundColor=[UIColor blackColor];
-//        self.videoItem.seekTime=_position;
-//        self.videoItem.videoURL= [self getUrl:self.src];
-//        [video configureControlView:nil videoItem:self.videoItem];
-//        if(_autoPlay){
-//            [video startPlay];
-//        }
-//    }
+    if(_src!=nil){
+        [_video removeFromSuperview];
+        SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
+        _video=video;
+        
+        _video.requirePreviewView = NO;
+        SPVideoPlayerControlView *c=_video.controlView;
+        
+        //        setImageSource
+        video.backgroundColor=[UIColor blackColor];
+        self.videoItem.seekTime=_position;
+        self.videoItem.videoURL= [self getUrl:self.src];
+        [video configureControlView:nil videoItem:self.videoItem];
+        if(_autoPlay){
+            [video startPlay];
+        }
+    }
     
 }
 
@@ -115,7 +120,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     }
     if([src startWith:PREFIX_SDCARD]){
         src=[src replace:PREFIX_SDCARD withString:@""];
-          return [NSURL fileURLWithPath:src];
+        return [NSURL fileURLWithPath:src];
     }
     NSURL *ul= [Weex getFinalUrl:src weexInstance:self.weexInstance];
     return ul;
@@ -123,32 +128,32 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 }
 
 -(void)dealloc{
-
+    
 }
 
 -(void)viewDidLoad{
     [super viewDidLoad];
     SPVideoPlayerView *video=[[SPVideoPlayerView alloc]init];
     _video=video;
-     _video.requirePreviewView = NO;
+    _video.requirePreviewView = NO;
     video.backgroundColor=[UIColor blackColor];
     [video configureControlView:nil videoItem:self.videoItem];
-   
+    
     if(_autoPlay){
-          [video startPlay];
+        [video startPlay];
     }
     SPVideoPlayerControlView *control=video.controlView;
     control.liveMode=self.liveMode;
     if(control.liveMode)
-    [control hideControlView];
+        [control hideControlView];
     [self regist:@"onPlayTimer" method:@selector(onPlayTimer:)];
     [self fireEvent:@"didload" params:nil];
-//    control.playDelegate=self;
+    //    control.playDelegate=self;
     SPVideoPlayerControlView *c=_video.controlView;
     [c setImg:_img weexIntance:self.weexInstance];
     UIImageView *placeholder=[UIImageView new];
     _placeholder=placeholder;
-//    [self.view addSubview:placeholder];
+    //    [self.view addSubview:placeholder];
     [video addSubviewFull:placeholder];
     [placeholder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
@@ -158,20 +163,20 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
             [video bringSubviewToFront:v];
         }
     }
-   
+    
     NSURL  *ul=[Weex getFinalUrl:_img weexInstance:self.weexInstance];
     [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
         placeholder.image=img;
     }];
-     _placeholder.hidden=false;
+    _placeholder.hidden=false;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
-
+    
 }
 
 
 -(void)onPlayTimer:(NSNotification*)notify{
-     self.weexInstance;
-      [self fireEvent:@"onPlaying" params:notify.userInfo];
+    self.weexInstance;
+    [self fireEvent:@"onPlaying" params:notify.userInfo];
 }
 
 /** 播放状态发生了改变 */
@@ -193,18 +198,18 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         }
             break;
         case SPVideoPlayerPlayStatePause:          // 暂停播放
-             [self onPause];
+            [self onPause];
             break;
         case SPVideoPlayerPlayStateBuffering:      // 缓冲中
             
             break;
         case SPVideoPlayerPlayStateBufferSuccessed: // 缓冲成功
-           
+            
             break;
         case SPVideoPlayerPlayStateEndedPlay:      // 播放结束
         {
-              _placeholder.hidden=false;
-             [self onCompelete];
+            _placeholder.hidden=false;
+            [self onCompelete];
             
         }
             break;
@@ -222,9 +227,9 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         [_video sp_controlViewRefreshButtonClicked:nil];
         SPVideoPlayerControlView *control= _video.controlView;
         [control repeatButtonnAction:nil];
-    
-//        [self sp_playerResetControlView];
-//        [self sp_playerShowControlView];
+        
+        //        [self sp_playerResetControlView];
+        //        [self sp_playerShowControlView];
     }
     else if(_video.playState==SPVideoPlayerPlayStatePause){
         [_video play];
@@ -233,10 +238,10 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     }
     
     
-   
+    
 }
 -(void)pause{
-   [_video pause];
+    [_video pause];
 }
 -(void)toggleFullScreen{
     [_video toggleFullScreen];
@@ -244,7 +249,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 
 
 -(void)seek:(double)time{
-   
+    
     [_video seekToTime:time/1000 completionHandler:^(BOOL finished) {
         
     }];
@@ -256,20 +261,20 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 }
 /**  */
 - (void)onStart{
-      [self fireEvent:@"onStart" params:nil];
+    [self fireEvent:@"onStart" params:nil];
 }
 /** 播放中 */
 - (void)onPlaying{
-      [self fireEvent:@"onPlaying" params:nil];
+    [self fireEvent:@"onPlaying" params:nil];
 }
 /** 暂停 */
 - (void)onPause{
-      [self fireEvent:@"onPause" params:nil];
+    [self fireEvent:@"onPause" params:nil];
 }
 
 /** 完成 */
 - (void)onCompelete{
-      [self fireEvent:@"onCompletion" params:nil];
+    [self fireEvent:@"onCompletion" params:nil];
 }
 
 @end
