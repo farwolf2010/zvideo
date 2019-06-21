@@ -99,9 +99,9 @@ public class WXPVideo extends  WXVContainer<VideoView>{
        src= Weex.getRootUrl(src,getInstance());
        if(getHostView()!=null){
            Glide
-                   .with((Activity)getContext())
-                   .load(src)
-                   .into( getHostView().getCoverImageView());
+           .with((Activity)getContext())
+           .load(src)
+           .into( getHostView().getCoverImageView());
        }
 
     }
