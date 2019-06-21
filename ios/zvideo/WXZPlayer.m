@@ -89,10 +89,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     }
     if(_img){
         
-        NSURL  *ul=[Weex getFinalUrl:_img weexInstance:self.weexInstance];
-        [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
-            _placeholder.image=img;
-        }];
+        
     }
     if(_src!=nil){
         [_video removeFromSuperview];
@@ -109,6 +106,9 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         [video configureControlView:nil videoItem:self.videoItem];
         if(_autoPlay){
             [video startPlay];
+        }
+        if(_img){
+            [self resetimg];
         }
     }
     
@@ -151,16 +151,23 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     //    control.playDelegate=self;
     SPVideoPlayerControlView *c=_video.controlView;
     [c setImg:_img weexIntance:self.weexInstance];
+    [self resetimg];
+    //    [self.view addSubview:placeholder];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
+    _placeholder.hidden=false;
+}
+-(void)resetimg{
     UIImageView *placeholder=[UIImageView new];
     _placeholder=placeholder;
-    //    [self.view addSubview:placeholder];
-    [video addSubviewFull:placeholder];
+    [_video addSubviewFull:placeholder];
     [placeholder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(0);
     }];
-    for(UIView *v in video.subviews){
+    for(UIView *v in _video.subviews){
         if(v!=_placeholder){
-            [video bringSubviewToFront:v];
+            [_video bringSubviewToFront:v];
         }
     }
     
@@ -168,8 +175,8 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     [Weex setImageSource:ul.absoluteString compelete:^(UIImage *img) {
         placeholder.image=img;
     }];
-    _placeholder.hidden=false;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
+    
+    
     
 }
 
@@ -190,6 +197,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     switch (state) {
         case SPVideoPlayerPlayStateReadyToPlay:    // 准备播放
             [self onPrepare];
+            _placeholder.hidden=false;
             break;
         case SPVideoPlayerPlayStatePlaying:        // 正在播放
         {
