@@ -804,45 +804,45 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  屏幕方向发生变化会调用这里
  */
 - (void)onDeviceOrientationChange {
-    if (!self.urlAsset) { return; }
-    if (SPPlayerShared.isLockScreen) { return; }
-    if (self.didEnterBackground) { return; };
-    if (self.playerPushedOrPresented) { return; }
-    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-    UIInterfaceOrientation interfaceOrientation = (UIInterfaceOrientation)orientation;
-    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown ) { return; }
-    
-    switch (interfaceOrientation) {
-        case UIInterfaceOrientationPortraitUpsideDown:{
-        }
-            break;
-        case UIInterfaceOrientationPortrait:{
-            if (self.isFullScreen) {
-                [self toOrientation:UIInterfaceOrientationPortrait];
-            }
-        }
-            break;
-        case UIInterfaceOrientationLandscapeLeft:{
-            if (self.isFullScreen == NO) {
-                [self toOrientation:UIInterfaceOrientationLandscapeLeft];
-                self.isFullScreen = YES;
-            } else {
-                [self toOrientation:UIInterfaceOrientationLandscapeLeft];
-            }
-        }
-            break;
-        case UIInterfaceOrientationLandscapeRight:{
-            if (self.isFullScreen == NO) {
-                [self toOrientation:UIInterfaceOrientationLandscapeRight];
-                self.isFullScreen = YES;
-            } else {
-                [self toOrientation:UIInterfaceOrientationLandscapeRight];
-            }
-        }
-            break;
-        default:
-            break;
-    }
+//    if (!self.urlAsset) { return; }
+//    if (SPPlayerShared.isLockScreen) { return; }
+//    if (self.didEnterBackground) { return; };
+//    if (self.playerPushedOrPresented) { return; }
+//    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+//    UIInterfaceOrientation interfaceOrientation = (UIInterfaceOrientation)orientation;
+//    if (orientation == UIDeviceOrientationFaceUp || orientation == UIDeviceOrientationFaceDown || orientation == UIDeviceOrientationUnknown ) { return; }
+//    
+//    switch (interfaceOrientation) {
+//        case UIInterfaceOrientationPortraitUpsideDown:{
+//        }
+//            break;
+//        case UIInterfaceOrientationPortrait:{
+//            if (self.isFullScreen) {
+//                [self toOrientation:UIInterfaceOrientationPortrait];
+//            }
+//        }
+//            break;
+//        case UIInterfaceOrientationLandscapeLeft:{
+//            if (self.isFullScreen == NO) {
+//                [self toOrientation:UIInterfaceOrientationLandscapeLeft];
+//                self.isFullScreen = YES;
+//            } else {
+//                [self toOrientation:UIInterfaceOrientationLandscapeLeft];
+//            }
+//        }
+//            break;
+//        case UIInterfaceOrientationLandscapeRight:{
+//            if (self.isFullScreen == NO) {
+//                [self toOrientation:UIInterfaceOrientationLandscapeRight];
+//                self.isFullScreen = YES;
+//            } else {
+//                [self toOrientation:UIInterfaceOrientationLandscapeRight];
+//            }
+//        }
+//            break;
+//        default:
+//            break;
+//    }
 }
 
 /**
