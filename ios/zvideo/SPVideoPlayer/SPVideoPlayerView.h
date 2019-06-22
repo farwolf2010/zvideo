@@ -112,6 +112,8 @@ typedef NS_ENUM(NSInteger,SPVideoPlayerLoadStatus) {
 @property (nonatomic, assign) BOOL                    cellPlayerOnCenter;
 /** player在栈上，即此时push或者模态了新控制器 */
 @property (nonatomic, assign) BOOL                    playerPushedOrPresented;
+
+@property (nonatomic) int _id;
 /**
  *  单例，用于列表cell上多个视频
  *

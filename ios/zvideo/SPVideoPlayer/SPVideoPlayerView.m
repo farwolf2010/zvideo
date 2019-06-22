@@ -161,6 +161,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  初始化
  */
 - (void)initializeThePlayer {
+ 
     self.requirePreviewView = YES;
     self.cellPlayerOnCenter = YES;
     self.stopPlayWhenPlayerHalfInvisable = YES;
@@ -458,7 +459,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             [self updatePlayState:SPVideoPlayerPlayStateReadyToPlay];
         } else { // 没有值说明是快进快退
             // 发出将要真实跳转的通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerWillJumpNSNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerWillJumpNSNotification object:self];
         }
         // seekTime:completionHandler:不能精确定位
         // 如果需要精确定位，可以使用seekToTime:toleranceBefore:toleranceAfter:completionHandler:
@@ -467,7 +468,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         __weak typeof(self) weakSelf = self;
         [self.player seekToTime:dragedCMTime toleranceBefore:CMTimeMake(1,1) toleranceAfter:CMTimeMake(1,1) completionHandler:^(BOOL finished) {
             // 跳转完毕的通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerDidJumpedNSNotification object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerDidJumpedNSNotification object:weakSelf];
             // 视频跳转回调
             if (completionHandler) { completionHandler(finished); }
             _isPauseByUser = NO;
@@ -604,7 +605,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
         if(totalTime!=0){
             per=currentTime/totalTime;
         }
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"onPlayTimer" object:nil userInfo:@{@"current":@(currentTime*1000),@"total":@(totalTime*1000),@"percent":@(per)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"onPlayTimer" object:weakSelf userInfo:@{@"current":@(currentTime*1000),@"total":@(totalTime*1000),@"percent":@(per)}];
         
         NSArray *loadedRanges = currentItem.seekableTimeRanges;
         if (loadedRanges.count > 0 && currentItem.duration.timescale != 0) {
@@ -617,7 +618,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             CGFloat value         = currentTime / totalTime;
             if (!weakSelf.isDragged) {
                 // 发出播放进度在改变的通知
-                [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:nil userInfo:@{@"currentTime":@(currentTime),@"totalTime":@(totalTime),@"value":@(value),@"playProgressState":@(SPVideoPlayerPlayProgressStateNomal),@"requirePreviewView":@(weakSelf.requirePreviewView)}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:weakSelf userInfo:@{@"currentTime":@(currentTime),@"totalTime":@(totalTime),@"value":@(value),@"playProgressState":@(SPVideoPlayerPlayProgressStateNomal),@"requirePreviewView":@(weakSelf.requirePreviewView)}];
             }
         }
     }];
@@ -1086,7 +1087,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             CMTime duration             = self.playerItem.duration;
             CGFloat totalDuration       = CMTimeGetSeconds(duration);
             // 发出缓冲进度改变的通知
-            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerBufferProgressValueChangedNSNotification object:nil userInfo:@{@"bufferProgress":@(timeInterval/totalDuration)}];
+            [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerBufferProgressValueChangedNSNotification object:self userInfo:@{@"bufferProgress":@(timeInterval/totalDuration)}];
             
         } else if ([keyPath isEqualToString:@"playbackBufferEmpty"]) {
             // 当缓冲是空的时候
@@ -1229,7 +1230,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     userInfo[@"playState"] = @(state);
     userInfo[@"seekTime"] = @(self.seekTime);
-    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerStateChangedNSNotification object:nil userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerStateChangedNSNotification object:self userInfo:userInfo];
 }
 
 /**
@@ -1533,7 +1534,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)verticalMoved:(CGFloat)value {
     self.isVolume ? (self.volumeViewSlider.value -= value / 10000) : ([UIScreen mainScreen].brightness -= value / 10000);
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerBrightnessOrVolumeDidChangedNotification object:nil userInfo:@{@"value":@(self.isVolume ? self.volumeViewSlider.value:[UIScreen mainScreen].brightness),@"isVolume":@(self.isVolume)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerBrightnessOrVolumeDidChangedNotification object:self userInfo:@{@"value":@(self.isVolume ? self.volumeViewSlider.value:[UIScreen mainScreen].brightness),@"isVolume":@(self.isVolume)}];
 }
 
 /**
@@ -1562,7 +1563,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else { // 否则就是小于0，等于0前面return了
         progressState = SPVideoPlayerPlayProgressStateFastBackForward; // 快退
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:nil userInfo:@{@"currentTime":@(self.sumTime),@"totalTime":@(totalMovieDuration),@"value":@(self.sumTime/totalMovieDuration),@"playProgressState":@(progressState),@"requirePreviewView":@(self.requirePreviewView)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:self userInfo:@{@"currentTime":@(self.sumTime),@"totalTime":@(totalMovieDuration),@"value":@(self.sumTime/totalMovieDuration),@"playProgressState":@(progressState),@"requirePreviewView":@(self.requirePreviewView)}];
     
     if (self.requirePreviewView && self.isFullScreen) {
         [self.imageGenerator cancelAllCGImageGeneration];
@@ -1857,7 +1858,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)setLoadStatus:(SPVideoPlayerLoadStatus)loadStatus {
     _loadStatus = loadStatus;
     // 发出网络状态改变的通知,通知里存储了网络状态和缓存是否为空的标识
-    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerLoadStatusDidChangedNotification object:nil userInfo:@{@"loadStatus":@(loadStatus),@"bufferEmpty":@(!self.playerItem.playbackLikelyToKeepUp)}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerLoadStatusDidChangedNotification object:self userInfo:@{@"loadStatus":@(loadStatus),@"bufferEmpty":@(!self.playerItem.playbackLikelyToKeepUp)}];
 
 }
 
@@ -2030,7 +2031,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
             progressState = SPVideoPlayerPlayProgressStateFastBackForward; // 快退
         }
         // 发送通知
-        [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:nil userInfo:@{@"currentTime":@(dragedSeconds),@"totalTime":@(totalTime),@"value":@(dragedSeconds/totalTime),@"playProgressState":@(progressState),@"requirePreviewView":@(self.requirePreviewView)}];
+        [[NSNotificationCenter defaultCenter] postNotificationName:SPVideoPlayerProgressValueChangedNSNotification object:self userInfo:@{@"currentTime":@(dragedSeconds),@"totalTime":@(totalTime),@"value":@(dragedSeconds/totalTime),@"playProgressState":@(progressState),@"requirePreviewView":@(self.requirePreviewView)}];
         
         if (totalTime > 0) { // 当总时长 > 0时候才能拖动slider
             

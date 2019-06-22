@@ -154,7 +154,10 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 #pragma mark - 通知方法
 /** 播放状态发生了改变 */
 - (void)videoPlayerStateChanged:(NSNotification *)notification {
-    
+    SPVideoPlayerView *sp=  notification.object;
+    if(sp.controlView!=self){
+        return;
+    }
     SPVideoPlayerPlayState state = [notification.userInfo[@"playState"] integerValue];
     // 上次停止播放的时间点(单位:s)
     CGFloat seekTime = [notification.userInfo[@"seekTime"] floatValue];
@@ -233,6 +236,10 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 播放进度发生了改变 */
 - (void)videoPlayerProgressValueChanged:(NSNotification *)notification {
+    SPVideoPlayerView *sp=  notification.object;
+    if(sp.controlView!=self){
+        return;
+    }
     // 当前时间
     CGFloat currentTime = [notification.userInfo[@"currentTime"] floatValue];
     // 总时间
@@ -332,12 +339,19 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 /** 视频播放进度将要发生真实跳转，此时也正是快进快退刚结束 */
 - (void)videoPlayerWillJump:(NSNotification *)noti {
     // 隐藏快进快退的view
+    SPVideoPlayerView *sp=  noti.object;
+    if(sp.controlView!=self){
+        return;
+    }
     self.fastView.hidden = YES;
 }
 
 /** 视频播放进度结束跳转 */
 - (void)videoPlayerDidJumped:(NSNotification *)noti {
-    
+    SPVideoPlayerView *sp=  noti.object;
+    if(sp.controlView!=self){
+        return;
+    }
     // 滑动结束延时隐藏controlView
     [self autoFadeOutControlView];
     
@@ -346,12 +360,20 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 缓冲进度发生了改变 */
 - (void)videoPlyerBufferProgressValueChanged:(NSNotification *)noti {
+    SPVideoPlayerView *sp=  noti.object;
+    if(sp.controlView!=self){
+        return;
+    }
     CGFloat bufferProgress = [noti.userInfo[@"bufferProgress"] floatValue];
     [self.bottomView.progressView setProgress:bufferProgress];
 }
 
 /** 监听视频截图 */
 - (void)cutVideoFinished:(NSNotification *)noti {
+    SPVideoPlayerView *sp=  noti.object;
+    if(sp.controlView!=self){
+        return;
+    }
     UIImage *image = noti.object;
     if (self.bottomView.playOrPauseButton.selected) { // 说明是播放状态
         [self playOrPauseButtonAction:self.bottomView.playOrPauseButton]; // 暂停
@@ -373,6 +395,10 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 /** 监听媒体网络加载状态 */
 - (void)loadStatusDidChanged:(NSNotification *)noti {
+    SPVideoPlayerView *sp=  noti.object;
+    if(sp.controlView!=self){
+        return;
+    }
     SPVideoPlayerLoadStatus status = [noti.userInfo[@"loadStatus"] integerValue];
     BOOL bufferEmpty = [noti.userInfo[@"bufferEmpty"] boolValue];
     switch (status) {
