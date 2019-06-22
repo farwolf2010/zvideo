@@ -54,12 +54,12 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
             @Override
             public void onMode(int mode) {
-                    if(mode==101){
-                        WXPVideo.this.fireEvent("onFullScreen");
-                    }
-                    else{
-                        WXPVideo.this.fireEvent("onNormalScreen");
-                    }
+                if(mode==101){
+                    WXPVideo.this.fireEvent("onFullScreen");
+                }
+                else{
+                    WXPVideo.this.fireEvent("onNormalScreen");
+                }
             }
 
             @Override
@@ -96,13 +96,13 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
     @WXComponentProp(name = "img")
     public void setImg(String src){
-       src= Weex.getRootUrl(src,getInstance());
-       if(getHostView()!=null){
-           Glide
-           .with((Activity)getContext())
-           .load(src)
-           .into( getHostView().getCoverImageView());
-       }
+        src= Weex.getRootUrl(src,getInstance());
+        if(getHostView()!=null){
+            Glide
+                    .with((Activity)getContext())
+                    .load(src)
+                    .into( getHostView().getCoverImageView());
+        }
 
     }
 
@@ -116,7 +116,11 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
     }
 
-
+    @Override
+    public void onActivityPause() {
+        super.onActivityPause();
+        this.pause();
+    }
 
     @WXComponentProp(name = "autoPlay")
     public void setAutoPlay(boolean auto){
@@ -161,7 +165,7 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
     @JSMethod
     public void play(){
-         getHostView().play();
+        getHostView().play();
     }
 
     @JSMethod
@@ -176,7 +180,7 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 //       getHostView().setUp(getHostView().getUrl(),title);
         TextView t= ((TextView)getHostView().findViewById(R.id.title));
         if(t!=null)
-        t.setText(title);
+            t.setText(title);
     }
 
     @JSMethod
@@ -234,8 +238,8 @@ public class WXPVideo extends  WXVContainer<VideoView>{
     }
 
     public void cancelTimer(){
-       if(timer!=null)
-           timer.cancel();
+        if(timer!=null)
+            timer.cancel();
     }
 
     public void statTimer(){
@@ -243,7 +247,7 @@ public class WXPVideo extends  WXVContainer<VideoView>{
         if(timer!=null) {
             timer.cancel();
         }
-         timer = new Timer();
+        timer = new Timer();
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
