@@ -12,6 +12,7 @@
 #import "SPVideoPlayerControlView.h"
 #import "farwolf.h"
 #import "Weex.h"
+#import "WXPlayerControl.h"
 
 @implementation WXZPlayer
 @synthesize weexInstance;
@@ -49,13 +50,6 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     UIView *v=[UIView new];
     v.backgroundColor=[UIColor blackColor];
     
-    //    [v addSubview:video];
-    //    [video mas_makeConstraints:^(MASConstraintMaker *make) {
-    //         make.left.mas_equalTo(v);
-    //         make.right.mas_equalTo(v);
-    //         make.bottom.mas_equalTo(v);
-    //         make.top.mas_equalTo(v);
-    //    }];
     return v;
 }
 - (SPVideoItem *)videoItem {
@@ -159,6 +153,15 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
     _placeholder.hidden=false;
+    WXPlayerControl *controlvc=[WXPlayerControl new];
+    controlvc.player=self;
+    [self.view addSubview:controlvc.view];
+    [controlvc.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(@(0));
+        make.height.equalTo(@(0));
+    }];
+    [self.weexInstance.viewController addChildViewController:controlvc];
+    
 }
 
 -(void)resetCover{
