@@ -201,7 +201,10 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
 
 /** 播放状态发生了改变 */
 - (void)videoPlayerStateChanged:(NSNotification *)notification {
-    
+    SPVideoPlayerView *sp=  notification.object;
+    if(sp!=self.video){
+        return;
+    }
     SPVideoPlayerPlayState state = [notification.userInfo[@"playState"] integerValue];
     // 上次停止播放的时间点(单位:s)
     CGFloat seekTime = [notification.userInfo[@"seekTime"] floatValue];
