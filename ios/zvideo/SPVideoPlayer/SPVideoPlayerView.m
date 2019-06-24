@@ -562,6 +562,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)createGesture {
     // 单击
+    if(((SPVideoPlayerControlView*)self.controlView).liveMode){
+        return;
+    }
     self.singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTapAction:)];
     self.singleTap.delegate                = self;
     self.singleTap.numberOfTouchesRequired = 1; //手指数
@@ -580,6 +583,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     [self.doubleTap setDelaysTouchesBegan:YES];
     // 双击失败响应单击事件
     [self.singleTap requireGestureRecognizerToFail:self.doubleTap];
+   
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -1073,6 +1077,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
                 [panRecognizer setDelaysTouchesBegan:YES];
                 [panRecognizer setDelaysTouchesEnded:YES];
                 [panRecognizer setCancelsTouchesInView:YES];
+                self.panRecognizer=panRecognizer;
                 [self addGestureRecognizer:panRecognizer];
                 
                 self.player.muted = self.mute;
@@ -1140,6 +1145,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+-(void)removeAllGesture{
+     [self removeGestureRecognizer:_panRecognizer];
 }
 
 /**
@@ -1343,6 +1352,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  @param gesture UITapGestureRecognizer
  */
 - (void)singleTapAction:(UIGestureRecognizer *)gesture {
+//    if(((SPVideoPlayerControlView*)self.controlView).liveMode){
+//        return;
+//    }
     // 小屏播放时单击全屏
     if ([gesture isKindOfClass:[NSNumber class]] && ![(id)gesture boolValue]) {
         if (self.isBottomVideo) {
@@ -1368,6 +1380,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *  @param gesture UITapGestureRecognizer
  */
 - (void)doubleTapAction:(UIGestureRecognizer *)gesture {
+    if(((SPVideoPlayerControlView*)self.controlView).liveMode){
+        return;
+    }
     if (_isPauseByUser) { [self play]; }
     else { [self pause]; }
     if (!self.isAutoPlay) {
@@ -1455,6 +1470,10 @@ typedef NS_ENUM(NSInteger, PanDirection){
  */
 - (void)panDirection:(UIPanGestureRecognizer *)pan {
     //根据在view上Pan的位置，确定是调音量还是亮度
+    if(((SPVideoPlayerControlView*)self.controlView).liveMode){
+        [self removeAllGesture];
+        return;
+    }
     CGPoint locationPoint = [pan locationInView:self];
     
     // 我们要响应水平移动和垂直移动

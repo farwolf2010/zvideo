@@ -265,6 +265,9 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
     if (!self.draggedBySlider) { // 如果是因为滑动slider而导致的快进或快退，则可以不用更新slider的值，如果不加判断,当滑动slider时，就更新了2次slider()。如果2次更新在同一线程上，可以不用加此判断，如果在不同线程上，不加判断slider的跟踪按钮会有小小的闪跳(这里可不加，加了更好)
        
         self.bottomView.videoSlider.value       = value;
+        if(self.liveMode){
+            self.bottomView.videoSlider.hidden=true;
+        }
         self.bottomProgressView.progress = value;
     }else{
         NSLog(@"drag");
@@ -729,11 +732,16 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
             self.cutBtn.alpha = 1;
         }
     }
+    if(self.liveMode){
+           self.bottomProgressView.alpha  = 0;
+        return;
+    }
     self.lockBtn.alpha             = 1;
      self.pauseBtn.alpha             = 1;
     if (self.isCellVideo) {
         self.shrink                = NO;
     }
+   
     self.bottomProgressView.alpha  = 0;
     SPPlayerShared.isStatusBarHidden = NO;
 }
@@ -760,9 +768,7 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 // 显示控制层,SPPlayerAnimationTimeInterval秒后自动隐藏
 - (void)sp_playerShowControlView {
-    if(self.liveMode){
-        return;
-    }
+   
     if ([self.delegate respondsToSelector:@selector(sp_controlViewWillShow:isFullscreen:)]) {
         [self.delegate sp_controlViewWillShow:self isFullscreen:self.isFullScreenMode];
     }
@@ -1005,6 +1011,7 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (SPVideoPlayerBottomControlView *)bottomView {
     
     if (!_bottomView) {
+       
         _bottomView = [[SPVideoPlayerBottomControlView alloc] init];
         [_bottomView.playOrPauseButton addTarget:self action:@selector(playOrPauseButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [_bottomView.nextButton addTarget:self action:@selector(nextButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -1134,7 +1141,10 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+    if(self.liveMode){
+        _bottomView.currentTimeLabel.hidden=true;
+        _bottomView.totalTimeLabel.hidden=true;
+    }
     CGFloat selfW = self.bounds.size.width;
     CGFloat selfH = self.bounds.size.height;
     

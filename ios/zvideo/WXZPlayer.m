@@ -168,7 +168,10 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     SPVideoPlayerControlView *control=_video.controlView;
     control.liveMode=self.liveMode;
     if(control.liveMode)
+    {
         [control hideControlView];
+        [_video removeAllGesture];
+    }
 }
 
 -(void)resetimg{

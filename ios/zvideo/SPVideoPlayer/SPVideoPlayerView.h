@@ -90,6 +90,8 @@ typedef NS_ENUM(NSInteger,SPVideoPlayerLoadStatus) {
 /** 是否有下载功能(默认是关闭) */
 @property (nonatomic, assign) BOOL                    hasDownload;
 
+@property(nonatomic) UIPanGestureRecognizer *panRecognizer;
+
 /** 是否要求预览图，全屏时默认为YES */
 @property (nonatomic, assign) BOOL                    requirePreviewView;
 /** 设置代理 */
@@ -131,6 +133,8 @@ typedef NS_ENUM(NSInteger,SPVideoPlayerLoadStatus) {
  */
 - (void)configureControlView:(UIView *)controlView videoItem:(SPVideoItem *)videoItem;
 
+
+-(void)removeAllGesture;
 /**
  *  相当于上面那个方法的controlView传nil
  */
