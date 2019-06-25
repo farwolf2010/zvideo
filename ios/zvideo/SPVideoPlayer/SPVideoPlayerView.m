@@ -1894,6 +1894,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
     if (!_brightnessView) {
         _brightnessView = [SPBrightnessView sharedBrightnessView];
     }
+    if(((SPVideoPlayerControlView*)self.controlView).liveMode){
+        _brightnessView.hidden=true;
+    }
     return _brightnessView;
 }
 

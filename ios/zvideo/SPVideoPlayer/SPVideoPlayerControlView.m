@@ -738,9 +738,11 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         self.bottomView.timeLabel.hidden=true;
         self.bottomView.currentTimeLabel.hidden=true;
         self.bottomView.totalTimeLabel.hidden=true;
-        
-        
+        self.bottomView.nextButton.hidden=true;
+        self.bottomView.progressView.hidden=true;
+ 
            self.bottomProgressView.alpha  = 0;
+        [SPBrightnessView sharedBrightnessView].hidden=true;
         return;
     }
     self.lockBtn.alpha             = 1;
@@ -908,6 +910,9 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
 - (void)sp_playerResetControlView {
     [self hideHUD];
     self.bottomView.videoSlider.value           = 0;
+    if(self.liveMode){
+        self.bottomView.videoSlider.hidden=true;
+    }
     self.bottomProgressView.progress = 0;
     self.bottomView.progressView.progress       = 0;
     self.bottomView.currentTimeLabel.text       = @"00:00";
