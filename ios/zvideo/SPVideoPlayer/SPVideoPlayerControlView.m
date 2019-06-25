@@ -733,6 +733,13 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
         }
     }
     if(self.liveMode){
+        self.bottomView.videoSlider.hidden=true;
+        self.bottomView.playOrPauseButton.hidden=true;
+        self.bottomView.timeLabel.hidden=true;
+        self.bottomView.currentTimeLabel.hidden=true;
+        self.bottomView.totalTimeLabel.hidden=true;
+        
+        
            self.bottomProgressView.alpha  = 0;
         return;
     }
