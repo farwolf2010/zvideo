@@ -215,6 +215,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else {
         self.controlView = controlView;
     }
+    self.controlView.delegate=self;
     self.videoItem = videoItem;
 }
 
@@ -238,7 +239,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     } else {
         self.controlView = controlView;
     }
-    
+    self.controlView.delegate=self;
     if (SPURLKey) {
         NSString *cacheUrl = [[NSUserDefaults standardUserDefaults] objectForKey:SPURLKey];
         if (cacheUrl) {
@@ -857,6 +858,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.scrollView.scrollsToTop = NO;
     [self toOrientation:orientation];
     self.isFullScreen = YES;
+    if(self.fullStateChange){
+        self.fullStateChange(@{@"isFull":@(self.isFullScreen)});
+    }
 }
 
 /**
@@ -905,6 +909,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     
     [self toOrientation:UIInterfaceOrientationPortrait];
     self.isFullScreen = NO;
+   
 }
 
 - (void)toOrientation:(UIInterfaceOrientation)orientation {
@@ -942,6 +947,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     self.transform = [self getTransformRotationAngle];
     // 开始旋转
     [UIView commitAnimations];
+   
 }
 
 /**
@@ -1015,6 +1021,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+
     if (!self.isFullScreen) {
         if (self.isCellVideo) {
             if (!self.isBottomVideo) { // 不是小屏
@@ -2177,6 +2184,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)sp_controlViewCloseButtonClicked:(UIButton *)sender {
     [self resetPlayer];
     [self removeFromSuperview];
+//    if(self.fullStateChange){
+//        self.fullStateChange(@{@"isFull":@(self.isFullScreen)});
+//    }
 }
 
 /** 重播按钮的代理方法 */

@@ -642,6 +642,9 @@ static const CGFloat SPPlayerControlBarAutoFadeOutTimeInterval = 0.35f;
             [self.delegate sp_controlViewBackButtonClicked:sender];
         }
     }
+    if(self.fullStateChange){
+        self.fullStateChange(@{@"isFull":@(NO)});
+    }
 }
 
 // 下载按钮的触发方法

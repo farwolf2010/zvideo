@@ -11,6 +11,7 @@
 #import "SPVideoItem.h"
 #import "SPVideoPlayerControlViewDelegate.h"
 #import "PlayDelegate.h"
+#import <WeexSDK/WeexSDK.h>
 
 /** 播放状态发生了改变的通知名称 */
 UIKIT_EXTERN NSNotificationName const SPVideoPlayerStateChangedNSNotification;
@@ -80,7 +81,7 @@ typedef NS_ENUM(NSInteger,SPVideoPlayerLoadStatus) {
 @interface SPVideoPlayerView : UIView <SPVideoPlayerControlViewDelegate>
 
 
-
+@property (nonatomic, strong) WXModuleCallback    fullStateChange;
 /** 控件View，就是展示播放暂停，滑动条，当前时间总时间等的view */
 @property (nonatomic, strong) UIView                 *controlView;
 /** 是否从上次停止的地方继续播放，默认是YES */

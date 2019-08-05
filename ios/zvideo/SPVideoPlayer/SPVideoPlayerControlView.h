@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "SPVideoSlider.h"
 #import "PlayDelegate.h"
+#import <WeexSDK/WeexSDK.h>
 #import "WXSDKInstance.h"
 
 @interface SPVideoPlayerControlView : UIView
 @property (nonatomic, assign) BOOL                    liveMode;
+@property (nonatomic, strong) WXModuleCallback    fullStateChange;
 - (void)sp_playerShowControlView;
 - (void)sp_playerResetControlView;
 - (void)repeatButtonnAction:(UIButton *)sender;

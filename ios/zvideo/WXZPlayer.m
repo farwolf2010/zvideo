@@ -92,6 +92,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         SPVideoPlayerControlView *c=_video.controlView;
         
         //        setImageSource
+    
         video.backgroundColor=[UIColor blackColor];
         self.videoItem.seekTime=_position;
         self.videoItem.videoURL= [self getUrl:self.src];
@@ -102,6 +103,14 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         if(_img){
             [self resetimg];
         }
+        __weak typeof (self)weakSlef=self;
+        video.fullStateChange = ^(id result) {
+            [weakSlef fireEvent:@"fullStateChange" params:result];
+        };
+        c.fullStateChange = ^(id result) {
+            [weakSlef fireEvent:@"fullStateChange" params:result];
+        };
+        
         if(self.liveMode)
             [self resetCover];
         return;
@@ -150,7 +159,13 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     [self resetimg];
     //    [self.view addSubview:placeholder];
     
-    
+    __weak typeof (self)weakSlef=self;
+    _video.fullStateChange = ^(id result) {
+        [weakSlef fireEvent:@"fullStateChange" params:result];
+    };
+    c.fullStateChange = ^(id result) {
+        [weakSlef fireEvent:@"fullStateChange" params:result];
+    };
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoPlayerStateChanged:) name:SPVideoPlayerStateChangedNSNotification object:nil];
     _placeholder.hidden=false;
     WXPlayerControl *controlvc=[WXPlayerControl new];
