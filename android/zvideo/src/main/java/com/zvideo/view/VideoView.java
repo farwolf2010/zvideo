@@ -8,15 +8,20 @@ import android.view.ViewGroup;
 
 import com.farwolf.weex.activity.WeexActivity;
 import com.taobao.weex.WXSDKInstance;
+import com.zvideo.component.WXPVideo;
 
 import org.song.videoplayer.DemoQSVideoView;
 import org.song.videoplayer.Util;
+
+import java.util.HashMap;
 
 import wbs.hundsun.com.zvideo.R;
 
 public class VideoView extends DemoQSVideoView {
 
     public WXSDKInstance instace;
+
+    public WXPVideo pvideo;
 
     public VideoView(Context context) {
         super(context);
@@ -74,8 +79,16 @@ public class VideoView extends DemoQSVideoView {
                 vp.removeView(videoView);
             ViewGroup decorView = (ViewGroup) (Util.scanForActivity(instace.getContext())).getWindow().getDecorView();
             decorView.addView(videoView, new LayoutParams(-1, -1));
+            HashMap m=new HashMap();
+            m.put("isFull",isFullScreen());
+            if(pvideo!=null)
+            pvideo.fireEvent("fullStateChange",m);
 
         }
+    }
+
+    public boolean isFullScreen(){
+        return currentMode == MODE_WINDOW_FULLSCREEN;
     }
 
 
@@ -89,6 +102,10 @@ public class VideoView extends DemoQSVideoView {
         }else{
             Util.SET_LANDSCAPE(ac);
         }
+        HashMap m=new HashMap();
+        m.put("isFull",isFullScreen());
+        if(pvideo!=null)
+        pvideo.fireEvent("fullStateChange",m);
 
     }
 }

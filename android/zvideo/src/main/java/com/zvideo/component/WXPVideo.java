@@ -44,6 +44,7 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 //        VideoPlayerView player=new VideoPlayerView(context);
         VideoView qsVideoView=new VideoView(context);
         qsVideoView.instace=this.mInstance;
+        qsVideoView.pvideo=this;
 //        JCVideoPlayer player=new JCVideoPlayer(context,null);
 //        VideoPlayerManager.getInstance().getVideoPlayer()
         qsVideoView.setPlayListener(new PlayListener() {
@@ -197,6 +198,16 @@ public class WXPVideo extends  WXVContainer<VideoView>{
 
     }
 
+    @JSMethod
+    public void toggleFullScreen(){
+//        VE_SURFACEHOLDER_FINISH_FULLSCREEN
+        if(getHostView().isFullScreen()){
+            getHostView().quitWindowFullscreen();
+        }else{
+            getHostView().enterWindowFullscreen();
+        }
+
+    }
 
     Handler handler = new Handler() {
         @Override
