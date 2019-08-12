@@ -175,7 +175,7 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
         make.width.equalTo(@(0));
         make.height.equalTo(@(0));
     }];
-    [self.weexInstance.viewController addChildViewController:controlvc];
+    [self.weexInstance.viewController.navigationController addChildViewController:controlvc];
     
 }
 
