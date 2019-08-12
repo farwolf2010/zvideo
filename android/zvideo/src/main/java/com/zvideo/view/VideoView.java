@@ -92,6 +92,7 @@ public class VideoView extends DemoQSVideoView {
     }
 
 
+    
     @Override
     public void quitWindowFullscreen() {
         super.quitWindowFullscreen();
