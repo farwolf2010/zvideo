@@ -170,7 +170,8 @@ WX_EXPORT_METHOD(@selector(toggleFullScreen))
     _placeholder.hidden=false;
     WXPlayerControl *controlvc=[WXPlayerControl new];
     controlvc.player=self;
-    [[self.view getCurrentVc] addChildViewController:controlvc];
+//    [[self.view getCurrentVc] addChildViewController:controlvc];
+      [self.weexInstance.viewController addChildViewController:controlvc];
     [self.view addSubview:controlvc.view];
     [controlvc.view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(@(0));

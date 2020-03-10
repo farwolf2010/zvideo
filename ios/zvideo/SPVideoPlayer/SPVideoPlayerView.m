@@ -915,8 +915,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
 - (void)toOrientation:(UIInterfaceOrientation)orientation {
     // 获取到当前状态条的方向
     UIInterfaceOrientation currentOrientation = [UIApplication sharedApplication].statusBarOrientation;
+//    [UIApplication sharedApplication].keyWindow.interfaceOrientation
     // 判断如果当前方向和要旋转的方向一致,那么不做任何操作
-    if (currentOrientation == orientation) { return; }
+//    if (currentOrientation == orientation) { return; }
     
     // 根据要旋转的方向,重新修改限制
     if (orientation != UIInterfaceOrientationPortrait) {//
@@ -944,7 +945,7 @@ typedef NS_ENUM(NSInteger, PanDirection){
     // 更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
     // 给你的播放视频的view视图设置旋转
     self.transform = CGAffineTransformIdentity;
-    self.transform = [self getTransformRotationAngle];
+    self.transform = [self getTransformRotationAngle:orientation];
     // 开始旋转
     [UIView commitAnimations];
    
@@ -955,9 +956,9 @@ typedef NS_ENUM(NSInteger, PanDirection){
  *
  * @return 角度
  */
-- (CGAffineTransform)getTransformRotationAngle {
+- (CGAffineTransform)getTransformRotationAngle:(UIInterfaceOrientation)orientation {
     // 状态条的方向已经设置过,所以这个就是你想要旋转的方向
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+//    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     // 根据要进行旋转的方向来计算旋转的角度
     if (orientation == UIInterfaceOrientationPortrait) {
         return CGAffineTransformIdentity;
@@ -2150,6 +2151,17 @@ typedef NS_ENUM(NSInteger, PanDirection){
             if ([self.delegate respondsToSelector:@selector(sp_playerBackAction)]) { [self.delegate sp_playerBackAction]; }
         } else {
             [self interfaceOrientation:UIInterfaceOrientationPortrait];
+        
+//        [[UIApplication sharedApplication] setStatusBarOrientation:UIInterfaceOrientationPortrait animated:NO];
+//           // 获取旋转状态条需要的时间:
+//           [UIView beginAnimations:nil context:nil];
+//           [UIView setAnimationDuration:0.3];
+//           // 更改了状态条的方向,但是设备方向UIInterfaceOrientation还是正方向的,这就要设置给你播放视频的视图的方向设置旋转
+//           // 给你的播放视频的view视图设置旋转
+//           self.transform = CGAffineTransformIdentity;
+//           self.transform = [self getTransformRotationAngle:UIInterfaceOrientationPortrait];
+//           // 开始旋转
+//           [UIView commitAnimations];
         }
     }
 }
