@@ -52,7 +52,7 @@ dependencies {
 //    api "com.github.tcking:ijkplayer-java:0.8.8"
 //    api "com.github.tcking:ijkplayer-armv7a:0.8.8"
     api 'com.github.tohodog:QSVideoPlayer:2.2.7'
-    api project(':farwolf.weex')
+    api 'com.farwolf.weexplus:farwolf.weex:latest.integration'
 
 //    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
 //    api 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
